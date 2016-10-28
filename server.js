@@ -16,15 +16,8 @@ app.use(function(req, res, next) {
   	next();
 });
 
-app.get('/', function(req, res) {
-    res.send('<h1>Hello, It is working!!!</h1>');
-});
-
-app.get('/about', function(req, res) {
-    res.send('About');
-});
-
+require('./config/routes')(app);
 
 app.listen(config.port, function() {
-    console.log('Our app is running on http://localhost:' + config.port);
+    console.log('App is running on http://localhost:' + config.port);
 });
