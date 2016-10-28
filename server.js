@@ -2,7 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
-var port = process.env.PORT || 8080;
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var config = require('./config/config')[env];
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -24,6 +25,6 @@ app.get('/about', function(req, res) {
 });
 
 
-app.listen(port, function() {
-    console.log('Our app is running on http://localhost:' + port);
+app.listen(config.port, function() {
+    console.log('Our app is running on http://localhost:' + config.port);
 });
