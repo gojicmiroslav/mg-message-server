@@ -1,3 +1,23 @@
+var mongoose = require('mongoose');
+
+var Message = mongoose.model('Message', {
+	msg: String
+});
+
+mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'Connection error'));
+db.on('open', function(){
+	console.log('Connected to MongoDB');
+	getMessages(Message);
+});
+
+function getMessages(Message){
+	Message.find({}).exec(function(err, result){
+		console.log(result);
+	});
+}
 
 module.exports = function(app, database) {
 	app.get('/', function(req, res) {
@@ -10,7 +30,13 @@ module.exports = function(app, database) {
 
 	app.post('/api/message', function(req, res){
 		console.log(req.body);
-		res.sendStatus(200);
-		database.collection('messages').insertOne(req.body);
+		var message = new Message(req.body);
+		message.save(function(err){
+			if (err) {
+			    console.log(err);
+		  	} else {
+			    console.log('Message saved to MongoDB');
+	  		}
+		});
 	});
 };
