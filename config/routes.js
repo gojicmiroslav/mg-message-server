@@ -10,12 +10,12 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));
 db.on('open', function(){
 	console.log('Connected to MongoDB');
-	getMessages(Message);
 });
 
-function getMessages(Message){
+function getMessages(req, res){
 	Message.find({}).exec(function(err, result){
 		console.log(result);
+		res.send(result);
 	});
 }
 
@@ -27,6 +27,8 @@ module.exports = function(app, database) {
 	app.get('/about', function(req, res) {
 	    res.send('About');
 	});
+
+	app.get('/api/messages', getMessages);
 
 	app.post('/api/message', function(req, res){
 		console.log(req.body);
